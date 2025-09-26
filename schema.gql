@@ -1,0 +1,86 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Int!
+  email: String!
+  password: String!
+  username: String
+  phone: String
+}
+
+type UserPaginationResponse {
+  data: [User!]!
+  total: Float!
+  currentPage: Float!
+  itemsPerPage: Float!
+}
+
+type loginResponse {
+  accessToken: String
+}
+
+type Pricing {
+  id: Int!
+  provider: String!
+  vcpuRate: Float!
+  memoryRate: Float!
+  storageRate: Float!
+  bandwidthRate: Float!
+}
+
+type Query {
+  users(filter: UserFilter!): UserPaginationResponse!
+  user(id: Float!): User!
+  myUsages(userId: Int!): [String!]!
+  getPricing(provider: String!): Pricing!
+}
+
+input UserFilter {
+  search: String
+  itemsPerPage: Int
+  page: Int
+}
+
+type Mutation {
+  createUser(userData: CreateUserDto!): User!
+  update(id: Float!, dataUpdate: UpdateUserDto!): User!
+  delete(id: Float!): Boolean!
+  register(userData: RegisterDto!): User!
+  login(userData: LoginDto!): loginResponse!
+  createUsage(userId: Int!, input: CreateUsageInput!): String!
+}
+
+input CreateUserDto {
+  email: String!
+  username: String!
+  password: String!
+  phone: String
+}
+
+input UpdateUserDto {
+  username: String
+  phone: String
+}
+
+input RegisterDto {
+  email: String!
+  username: String!
+  password: String!
+  phone: String
+}
+
+input LoginDto {
+  email: String!
+  password: String!
+}
+
+input CreateUsageInput {
+  pricingId: Int!
+  vcpu: Int!
+  memoryGb: Int!
+  storageGb: Int!
+  bandwidthGb: Int!
+  hours: Int! = 730
+}
