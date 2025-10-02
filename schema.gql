@@ -33,7 +33,7 @@ type Pricing {
 type Query {
   users(filter: UserFilter!): UserPaginationResponse!
   user(id: Float!): User!
-  myUsages(userId: Int!): [String!]!
+  myUsages: [String!]!
   getPricing(provider: String!): Pricing!
 }
 
@@ -49,7 +49,7 @@ type Mutation {
   delete(id: Float!): Boolean!
   register(userData: RegisterDto!): User!
   login(userData: LoginDto!): loginResponse!
-  createUsage(userId: Int!, input: CreateUsageInput!): String!
+  createUsage(input: CreateUsageInput!): String!
 }
 
 input CreateUserDto {
@@ -66,7 +66,7 @@ input UpdateUserDto {
 
 input RegisterDto {
   email: String!
-  username: String!
+  username: String
   password: String!
   phone: String
 }

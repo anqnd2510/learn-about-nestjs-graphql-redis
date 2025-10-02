@@ -14,9 +14,9 @@ export class RegisterDto {
   @IsEmail()
   email: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @IsOptional()
-  username: string;
+  username?: string;
 
   @Field(() => String)
   @IsNotEmpty()

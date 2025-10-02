@@ -8,29 +8,33 @@ import {
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
-import { error } from 'console';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = GqlExecutionContext.create(context);
-    //console.log('req =>', ctx.getContext().req.headers.authorization);
-    const token = this.getToken(ctx.getContext().req);
-    //console.log('token => ', token);
+    const req = ctx.getContext().req;
+    const token = this.getToken(req);
 
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('No token provided');
     }
+
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.ACCESS_TOKEN_KEY,
       });
+
+      // 🔑 gắn payload vào req.user để resolver có thể dùng
+      req.user = payload;
+
       return true;
-    } catch (error) {}
-    console.log('err => ', error);
-    throw new HttpException('Invalid token!', HttpStatus.UNAUTHORIZED);
-    return false;
+    } catch (err) {
+      console.log('JWT error => ', err);
+      throw new HttpException('Invalid token!', HttpStatus.UNAUTHORIZED);
+    }
   }
 
   private getToken(req: any): string | undefined {
